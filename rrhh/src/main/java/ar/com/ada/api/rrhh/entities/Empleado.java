@@ -5,26 +5,23 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "empleado")
-
 public class Empleado {
-
     @Id
     @Column(name = "empleado_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int empleadoId;
-    @Column(name = "nombre")
     private String nombre;
-    @Column(name = "edad")
     private int edad;
-    @ManyToOne
-    @JoinColumn(name = "categoria_id", referencedColumnName = "categoria_id")
-    private Categoria categoria;
-    @Column(name = "sueldo")
     private BigDecimal sueldo;
     @Column(name = "estado_id")
     private int estadoId;
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", referencedColumnName = "categoria_id")
+    private Categoria categoria;
     @Column(name = "fecha_alta")
     private Date fechaAlta;
     @Column(name = "fecha_baja")
@@ -54,19 +51,6 @@ public class Empleado {
         this.edad = edad;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-        /*
-         * se agrega el empleado en la lista de empleados que tenemos en la clase
-         * categoria
-         */
-        this.categoria.getEmpleados().add(this);
-    }
-
     public BigDecimal getSueldo() {
         return sueldo;
     }
@@ -81,6 +65,15 @@ public class Empleado {
 
     public void setEstadoId(int estadoId) {
         this.estadoId = estadoId;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+        this.categoria.getEmpleados().add(this);
     }
 
     public Date getFechaAlta() {
